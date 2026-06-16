@@ -87,13 +87,7 @@ Por esta razón, vóxeles vecinos pueden contener direcciones equivalentes pero 
 
 Antes de realizar la interpolación, todos los vectores vecinos son alineados con respecto a una dirección de referencia utilizando:
 
-```math
-\mathbf{v}_i
-\leftarrow
-\operatorname{sign}
-(\mathbf{v}_i \cdot \mathbf{v}_{ref})
-\mathbf{v}_i
-```
+\mathbf{v}_i \leftarrow \text{sign}(\mathbf{v}_i \cdot \mathbf{v}_{ref})\mathbf{v}_i
 
 Esto evita cancelaciones artificiales durante la interpolación.
 
