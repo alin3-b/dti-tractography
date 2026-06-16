@@ -215,7 +215,7 @@ El pipeline permite obtener:
 - Mapas de MD.
 - Campo de direcciones principales (PDD).
 - Semillas de tractografía.
-- Tractogramas completos en formato `.trk`.
+- Tractogramas completos en formato `.tck`.
 
 Los detalles matemáticos y de implementación se encuentran en:
 
