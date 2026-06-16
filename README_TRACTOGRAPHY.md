@@ -18,7 +18,7 @@ Implementación desde cero de un algoritmo de tractografía determinística basa
   * Umbral mínimo de FA.
   * Curvatura máxima permitida.
   * Longitud máxima de propagación.
-* Exportación del tractograma en formato `.trk`.
+* Exportación del tractograma en formato `.tck`.
 
 ---
 
@@ -286,7 +286,7 @@ python -m scripts.run_tracking
 Salida:
 
 ```text
-data/processed/tracts/tractogram.trk
+data/processed/tracts/tractogram.tck
 ```
 
 ---
@@ -316,16 +316,12 @@ Estos archivos son generados previamente por el pipeline DTI.
 La salida final es un tractograma en formato TrackVis:
 
 ```text
-.trk
+.tck
 ```
 
 compatible con:
 
 * MRtrix3
-* DIPY
-* TrackVis
-* MITK Diffusion
-* 3D Slicer
 
 Las streamlines reconstruyen trayectorias aproximadas de los haces de materia blanca siguiendo la dirección principal de difusión estimada en cada vóxel.
 
