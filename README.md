@@ -10,7 +10,7 @@ Implementación desde cero de un pipeline de procesamiento de imágenes de reson
 - Obtención de direcciones principales de difusión (PDD).
 - Generación de semillas.
 - Tractografía determinística basada en streamlines.
-- Exportación de resultados en formatos NIfTI y TRK.
+- Exportación de resultados en formatos NIfTI y TCK.
 
 ---
 
@@ -167,7 +167,7 @@ Genera:
 
 ```text
 data/processed/tracts/
-└── tractogram.trk
+└── tractogram.tck
 ```
 
 ---
