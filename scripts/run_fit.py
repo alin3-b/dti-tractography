@@ -18,10 +18,12 @@ def main():
     OUT_DT_FILE = 'ISMRM_2023_b3000_DT.nii.gz'
     OUT_FA_FILE = 'ISMRM_2023_b3000_FA.nii.gz'
     OUT_MD_FILE = 'ISMRM_2023_b3000_MD.nii.gz'
+    OUT_PDD_FILE = "ISMRM_2023_b3000_PDD.nii.gz"
 
     # Construcción automática de rutas fijas de carpetas
     INPUT_DIR = 'data/raw/'
-    OUTPUT_DIR = 'data/processed/'
+    OUTPUT_DIR_DT = 'data/processed/tensors/'
+    OUTPUT_DIR_FA_MD_PDD = 'data/processed/metrics/'
 
     print("Pipeline DTI")
     
@@ -44,33 +46,41 @@ def main():
     )
 
     # Calcular las métricas escalares (Anisotropía Fraccional y Difusividad Media)
-    FA, MD = calculate_dti_metrics(DT, dataset["mask"])
+    FA, MD, PDD = calculate_dti_metrics(DT, dataset["mask"])
 
     # Guardar los resultados en formato NIfTI
     print("Guardando archivos procesados...")
     
     # Guardar el tensor completo (6 componentes)
     save_nifti(
-        dt_data=DT, 
+        data=DT, 
         affine=dataset["affine"], 
         header=dataset["header"], 
-        output_path=OUTPUT_DIR + OUT_DT_FILE
+        output_path=OUTPUT_DIR_DT + OUT_DT_FILE
     )
     
     # Guardar el mapa de Anisotropía Fraccional
     save_nifti(
-        dt_data=FA, 
+        data=FA, 
         affine=dataset["affine"], 
         header=dataset["header"], 
-        output_path=OUTPUT_DIR + OUT_FA_FILE
+        output_path=OUTPUT_DIR_FA_MD_PDD + OUT_FA_FILE
     )
     
     # Guardar el mapa de Difusividad Media
     save_nifti(
-        dt_data=MD, 
+        data=MD, 
         affine=dataset["affine"], 
         header=dataset["header"], 
-        output_path=OUTPUT_DIR + OUT_MD_FILE
+        output_path=OUTPUT_DIR_FA_MD_PDD + OUT_MD_FILE
+    )
+
+    # Guardar el mapa de PDD
+    save_nifti(
+        data=PDD,
+        affine=dataset["affine"],
+        header=dataset["header"],
+        output_path=OUTPUT_DIR_FA_MD_PDD + OUT_PDD_FILE
     )
     
     print("Proceso completado con éxito")

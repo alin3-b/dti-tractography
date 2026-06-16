@@ -1,97 +1,68 @@
-# Diffusion Tensor Imaging (DTI)
+# Diffusion MRI and Tractography
+<p align="center">
+  <img src="docs/images/tractography.png" width="85%">
+</p>
 
-Implementación desde cero del modelo de Tensor de Difusión (DTI) para imágenes de resonancia magnética ponderadas por difusión (DW-MRI).
+Implementación desde cero de un pipeline de procesamiento de imágenes de resonancia magnética por difusión (DW-MRI), incluyendo:
 
-## Características
-
-- Estimación del tensor de difusión mediante Mínimos Cuadrados Ordinarios (OLS).
-- Construcción explícita de la matriz de diseño.
-- Implementación modular del pipeline DTI.
-- Cálculo de métricas escalares:
-  - Mean Diffusivity (MD)
-  - Fractional Anisotropy (FA)
-- Exportación de resultados en formato NIfTI.
-- Suite de pruebas automatizadas con pytest.
+- Estimación del Tensor de Difusión (DTI).
+- Cálculo de métricas microestructurales.
+- Obtención de direcciones principales de difusión (PDD).
+- Generación de semillas.
+- Tractografía determinística basada en streamlines.
+- Exportación de resultados en formatos NIfTI y TRK.
 
 ---
 
-# Fundamento teórico
+# Objetivos
 
-La señal de difusión está modelada por:
+Este proyecto tiene como objetivo implementar de forma explícita y modular las principales etapas de un pipeline clásico de reconstrucción de tractos de sustancia blanca a partir de datos DW-MRI.
 
-```math
-S_i=S_0 e^{-b_i g_i^T D g_i}
-```
+El repositorio está dividido en dos bloques principales:
 
-donde:
+1. **Tensor de Difusión (DTI)**
+2. **Tractografía Determinística**
 
-* $S_0$: Señal sin ponderación de difusión ($b = 0$).
-* $S_i$: Señal medida para la dirección $i$.
-* $b_i$: Factor de ponderación de difusión ($b\text{-value}$).
-* $\mathbf{g}_i$: Vector de dirección del gradiente.
-* $D$: Tensor de difusión.
-
-Aplicando logaritmo natural:
-
-```math
--\frac{\ln(S_i/S_0)}{b_i}
-=
-g_i^T D g_i
-```
-
-lo que permite construir un sistema lineal de la forma:
-
-```math
-B=A\hat d
-```
-
-donde:
-
-* ($B$) contiene las observaciones experimentales.
-* ($A$) es la matriz de diseño construida a partir de los gradientes.
-* ($\hat d$) contiene los seis parámetros independientes del tensor.
-
-La estimación se realiza mediante mínimos cuadrados:
-
-```math
-\hat d=(A^TA)^{-1}A^TB
-```
 ---
-## Derivación matemática completa
 
-La derivación detallada del modelo, incluyendo:
+# Documentación
 
-- Linealización de la ecuación de Stejskal-Tanner.
-- Construcción de la matriz de diseño $(A)$.
-- Definición del vector de observaciones $(B)$.
-- Formulación del problema de mínimos cuadrados.
-- Obtención de la solución
+## Tensor de Difusión
 
-```math
-\hat d = (A^T A)^{-1}A^T B
-```
+Contiene:
 
-puede consultarse en:
+- Modelo de Stejskal-Tanner.
+- Construcción de la matriz de diseño.
+- Ajuste por mínimos cuadrados.
+- Estimación voxel a voxel del tensor.
+- Cálculo de FA.
+- Cálculo de MD.
+- Obtención de la Dirección Principal de Difusión (PDD).
+
+Consultar:
 
 ```text
-docs/dti_theory.pdf
+README_DTI.md
 ```
+
 ---
 
-# Relación entre teoría e implementación
+## Tractografía
 
-| Teoría                              | Archivo            |
-| ----------------------------------- | ------------------ |
-| Construcción de $(A)$                 | `design_matrix.py` |
-| Construcción de $(B)$                 | `tensor.py`        |
-| Resolución $(\hat d=(A^TA)^{-1}A^TB)$ | `least_squares.py` |
-| Ajuste vóxel a vóxel                | `estimation.py`    |
-| Reconstrucción del tensor           | `estimation.py`    |
-| Cálculo de autovalores              | `metrics.py`       |
-| Cálculo de MD                       | `metrics.py`       |
-| Cálculo de FA                       | `metrics.py`       |
-| Lectura de datos                    | `load_data.py`     |
-| Escritura de resultados             | `save_data.py`     |
+Contiene:
+
+- Generación de semillas.
+- Interpolación trilineal de la PDD.
+- Integración de Euler.
+- Criterios de parada.
+- Seguimiento bidireccional.
+- Construcción del tractograma final.
+
+Consultar:
+
+```text
+README_TRACTOGRAPHY.md
+```
 
 ---
 
@@ -100,18 +71,20 @@ docs/dti_theory.pdf
 ```text
 .
 ├── data
-|   ├── raw
-│   |   ├── ISMRM_2023_b3000.nii.gz
-│   |   ├── ISMRM_2023_b3000.bval
-│   |   ├── ISMRM_2023_b3000.bvec
-│   |   └── ISMRM_2023_b3000_mask.nii
-│   |
-|   └── processed
+│   ├── raw
+│   └── processed
+│       ├── metrics
+│       ├── seeds
+│       ├── tensors
+│       └── tracts
 │
 ├── docs
+│   └── images
 │
 ├── scripts
-│   └── run_fit.py
+│   ├── run_fit.py
+│   ├── run_seeding.py
+│   └── run_tracking.py
 │
 ├── src
 │   ├── dti
@@ -121,55 +94,93 @@ docs/dti_theory.pdf
 │   │   ├── estimation.py
 │   │   └── metrics.py
 │   │
+│   ├── tractography
+│   │   ├── seeds.py
+│   │   ├── interpolation.py
+│   │   ├── propagation.py
+│   │   └── tracking.py
+│   │
 │   └── io
 │       ├── load_data.py
 │       └── save_data.py
 │
 ├── tests
+│   ├── dti
+│   ├── tractography
+│   └── scripts
 │
+├── README.md
+├── README_DTI.md
+├── README_TRACTOGRAPHY.md
 ├── requirements.txt
-└── README.md
+└── .gitignore
 ```
 
 ---
 
-# Dependencias principales
+# Pipeline completo
+
+## 1. Estimación del Tensor de Difusión
+
+```bash
+python -m scripts.run_fit
+```
+
+Genera:
+
+```text
+data/processed/tensors/
+└── ISMRM_2023_b3000_DT.nii.gz
+```
+
+```text
+data/processed/metrics/
+├── ISMRM_2023_b3000_FA.nii.gz
+├── ISMRM_2023_b3000_MD.nii.gz
+└── ISMRM_2023_b3000_PDD.nii.gz
+```
+
+---
+
+## 2. Generación de semillas
+
+```bash
+python -m scripts.run_seeding
+```
+
+Genera:
+
+```text
+data/processed/seeds/
+└── seeds.npy
+```
+
+---
+
+## 3. Tractografía
+
+```bash
+python -m scripts.run_tracking
+```
+
+Genera:
+
+```text
+data/processed/tracts/
+└── tractogram.trk
+```
+
+---
+
+# Dependencias
 
 - numpy
 - nibabel
 - dipy
+- tqdm
 - pytest
 
-Las versiones exactas se encuentran especificadas en:
-
-```text
-requirements.txt
-```
----
-
-# Instalación
-
-Crear un entorno virtual:
-
-```bash
-python -m venv .venv
-```
-
-Activar el entorno:
-
-### Linux / macOS
-
-```bash
-source .venv/bin/activate
-```
-
-### Windows
-
-```bash
-.venv\Scripts\activate
-```
-
-Instalar dependencias:
+Instalación:
 
 ```bash
 pip install -r requirements.txt
@@ -179,20 +190,11 @@ pip install -r requirements.txt
 
 # Dataset
 
-Los experimentos fueron realizados utilizando el dataset:
+Los experimentos fueron realizados utilizando el:
 
-ISMRM 2023 Tractography Challenge Dataset
+**ISMRM 2023 Tractography Challenge Dataset**
 
-Archivos utilizados:
-
-- ISMRM_2023_b3000.nii.gz
-- ISMRM_2023_b3000.bval
-- ISMRM_2023_b3000.bvec
-- ISMRM_2023_b3000_mask.nii
-
-# Datos de entrada
-
-Los archivos de entrada deben colocarse en:
+Archivos requeridos:
 
 ```text
 data/raw/
@@ -204,174 +206,28 @@ data/raw/
 
 ---
 
-# Ejecución
+# Resultados
 
-Ejecutar:
+El pipeline permite obtener:
 
-```bash
-python -m scripts.run_fit
-```
+- Tensor de difusión.
+- Mapas de FA.
+- Mapas de MD.
+- Campo de direcciones principales (PDD).
+- Semillas de tractografía.
+- Tractogramas completos en formato `.trk`.
 
----
-
-# Salidas
-
-El programa genera un volumen NIfTI que contiene el tensor de difusión:
-
-```text
-data/processed/ISMRM_2023_b3000_DT.nii.gz
-```
-
-Los seis componentes se almacenan en el orden:
+Los detalles matemáticos y de implementación se encuentran en:
 
 ```text
-[Dxx, Dyy, Dzz, Dxy, Dxz, Dyz]
+README_DTI.md
+README_TRACTOGRAPHY.md
 ```
-
-Posteriormente pueden generarse mapas escalares como:
-
-* FA (Fractional Anisotropy)
-* MD (Mean Diffusivity)
-
----
-
-# Resultados y Mapas Microestructurales
-
-A partir del tensor de difusión estimado voxel a voxel, se generaron los volúmenes paramétricos y las reconstrucciones de orientación espacial correspondientes. El pipeline discrimina con éxito las zonas de alta direccionalidad (materia blanca) de las zonas isotrópicas (líquido cefalorraquídeo).
-
-### Mapas Escalares de Difusión
-
-| Anisotropía Fraccional (FA) | Difusividad Media (MD) |
-| :---: | :---: |
-| ![FA](docs/images/fa_map.png) | ![MD](docs/images/md_map.png) |
-| *Valores cercanos a 1.0 (brillante) indican difusión altamente restringida en tractos axonales.* | *Valores altos (brillante) corresponden a difusión libre en los ventrículos laterales.* |
-
-### Reconstrucción Geométrica del Tensor (Glifos)
-
-La imagen inferior muestra la orientación tridimensional del tensor ($D$) estimada por nuestro módulo `estimation.py` y renderizada mediante los glifos elipsoidales de MRtrix. La orientación del mapa geométrico sigue el código de colores estandarizado: **Rojo** (Izquierda-Derecha), **Verde** (Anterior-Posterior), y **Azul** (Craneal-Caudal).
-
-<p align="center">
-  <img src="docs/images/tensor.png" width="70%" alt="Glifos del Tensor de Difusión en MRtrix">
-  <br>
-  <i>Vista de los elipsoides de difusión en el cuerpo calloso. La forma alargada (prolada) valida el correcto cálculo de los autovalores y autovectores primarios.</i>
-</p>
-
-# Métricas escalares
-
-## Difusividad Media (MD)
-
-$$MD = \frac{\lambda_1 + \lambda_2 + \lambda_3}{3}$$
-
-donde $\lambda_1, \lambda_2, \lambda_3$ son los autovalores del tensor de difusión.
-
-## Anisotropía Fraccional (FA)
-
-```math
-FA=
-\sqrt{\frac{3}{2}}
-\frac{
-\sqrt{
-(\lambda_1-MD)^2+
-(\lambda_2-MD)^2+
-(\lambda_3-MD)^2
-}
-}{
-\sqrt{
-\lambda_1^2+\lambda_2^2+\lambda_3^2
-}
-}
-```
-
----
-
-# Validación
-
-La implementación fue validada mediante:
-
-- pruebas unitarias de cada módulo,
-- comparación de dimensiones esperadas,
-- verificación de la reconstrucción del tensor.
-
----
-
-# Pruebas
-
-Ejecutar todos los tests:
-
-```bash
-pytest
-```
-
-o
-
-```bash
-pytest tests/
-```
-
----
-
-# Descripción de módulos
-
-### `tensor.py`
-
-Construye el vector:
-
-```math
-B_i=
--\frac{\ln(S_i/S_0)}{b_i}
-```
-
-a partir de las señales medidas.
-
-### `design_matrix.py`
-
-Construye la matriz de diseño:
-
-```math
-A=
-\begin{pmatrix}
-g_x^2 &
-2g_xg_y &
-2g_xg_z &
-g_y^2 &
-2g_yg_z &
-g_z^2
-\end{pmatrix}
-```
-
-para cada dirección de gradiente.
-
-### `least_squares.py`
-
-Calcula la pseudoinversa y resuelve:
-
-```math
-\hat d=(A^TA)^{-1}A^TB
-```
-
-### `estimation.py`
-
-Aplica el ajuste de mínimos cuadrados a cada vóxel de la imagen.
-
-### `metrics.py`
-
-Reconstruye el tensor:
-
-```math
-D=
-\begin{pmatrix}
-D_{xx} & D_{xy} & D_{xz}\\
-D_{xy} & D_{yy} & D_{yz}\\
-D_{xz} & D_{yz} & D_{zz}
-\end{pmatrix}
-```
-
-obtiene los autovalores y calcula FA y MD.
 
 ---
 
 # Referencias
 
-* Basser, P. J., Mattiello, J., & LeBihan, D. (1994). MR diffusion tensor spectroscopy and imaging.
-* Stejskal, E. O., & Tanner, J. E. (1965). Spin diffusion measurements: spin echoes in the presence of a time-dependent field gradient.
-* Descoteaux, M. (2023). Diffusion MRI: Theory, Methods and Applications.
+- Stejskal, E. O., & Tanner, J. E. (1965).
+- Basser, P. J., Mattiello, J., & LeBihan, D. (1994).
+- Descoteaux, M. (2023). Diffusion MRI: Theory, Methods and Applications.
