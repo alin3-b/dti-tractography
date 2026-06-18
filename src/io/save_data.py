@@ -3,7 +3,6 @@ from pathlib import Path
 import nibabel as nib
 import numpy as np
 
-
 def save_nifti(
     data: np.ndarray,
     affine: np.ndarray,
@@ -30,7 +29,6 @@ def save_nifti(
 
     print(f'Archivo NIfTI guardado: {output_path}')
 
-
 def save_seeds(
     seeds: np.ndarray,
     output_path: str,
@@ -48,7 +46,6 @@ def save_seeds(
 
     np.save(str(output_path), seeds)
     print(f'Semillas guardadas: {output_path}')
-
 
 def save_tractogram(
     streamlines: list[np.ndarray],

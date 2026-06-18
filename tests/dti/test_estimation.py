@@ -8,7 +8,7 @@ def test_fit_tensor_model_integration():
     Verifica que el ciclo orquestador procese los voxeles bajo la máscara,
     ignore el fondo y ordene correctamente los canales del tensor resultante.
     """
-    # 1. Definir dimensiones pequeñas para el test (2x2x2 voxeles)
+    # Definir dimensiones pequeñas para el test (2x2x2 voxeles)
     # Usaremos 7 volúmenes en total (1 volumen b0 y 6 direcciones de gradiente)
     nx, ny, nz = 2, 2, 2
     n_volumes = 7
@@ -25,7 +25,7 @@ def test_fit_tensor_model_integration():
         [0.0, 1.0 / np.sqrt(2), 1.0 / np.sqrt(2)]
     ])
     
-    # 3. Diseñar un tensor teórico conocido que queremos recuperar
+    # Diseñar un tensor teórico conocido que queremos recuperar
     # Orden deseado final: [Dxx, Dyy, Dzz, Dxy, Dxz, Dyz]
     # d_hat intermedio de mínimos cuadrados: [Dxx, 2Dxy, 2Dxz, Dyy, 2Dyz, Dzz]
     Dxx, Dyy, Dzz = 1.5e-3, 1.0e-3, 0.8e-3
@@ -48,16 +48,16 @@ def test_fit_tensor_model_integration():
     # Construir el vector completo de señales para un vóxel activo (b0 + 6 direcciones)
     voxel_signals = np.array([S0_val] + signals)
     
-    # 4. Poblar la matriz de datos DWI 4D
+    # Poblar la matriz de datos DWI 4D
     dwi_data = np.zeros((nx, ny, nz, n_volumes))
     # Ponemos la señal sintética únicamente en el vóxel [1, 1, 1]
     dwi_data[1, 1, 1, :] = voxel_signals
     
-    # 5. Configurar la máscara: Solo activamos el vóxel [1, 1, 1]. El resto [0,0,0] será fondo.
+    # Configurar la máscara: Solo activamos el vóxel [1, 1, 1]. El resto [0,0,0] será fondo.
     mask = np.zeros((nx, ny, nz), dtype=np.int32)
     mask[1, 1, 1] = 1
     
-    # 6. Ejecutar la estimación completa
+    # Ejecutar la estimación completa
     DT = fit_tensor_model(dwi_data, mask, bvals, bvecs, s0_index=0)
     
  

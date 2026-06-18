@@ -5,7 +5,6 @@ import numpy as np
 from dipy.core.gradients import gradient_table
 from dipy.io import read_bvals_bvecs
 
-
 def load_dwi_data(
     dwi_path: str,
     bval_path: str,
@@ -80,7 +79,6 @@ def load_dwi_data(
         'n_volumes': dwi_data.shape[3],
     }
 
-
 def load_nifti(
     nifti_path: str,
 ) -> tuple[np.ndarray, np.ndarray, nib.Nifti1Header]:
@@ -103,7 +101,6 @@ def load_nifti(
         img.affine,
         img.header.copy(),
     )
-
 
 def load_seeds(
     seeds_path: str,

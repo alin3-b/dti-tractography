@@ -16,24 +16,24 @@ def generate_seeds(
     """Genera coordenadas continuas 3D para iniciar la tractografía.
 
     Combina la máscara del cerebro y un umbral de Anisotropía Fraccional (FA).
-
-    Parameters:
-    mask : np.ndarray
-        Máscara binaria del cerebro de forma (X, Y, Z).
-    fa_volume : np.ndarray
-        Mapa de Anisotropía Fraccional de forma (X, Y, Z).
-    fa_thresh : float
-        Umbral mínimo de FA para considerar materia blanca.
-    method : str
-        'grid' para sub-rejilla fija por vóxel o 'random' para muestreo
-        estocástico.
-    density : int
-        Si el método es 'grid', define el número de semillas por eje dentro del
-        vóxel (ej. 2 significa 2x2x2 = 8 semillas por vóxel).
-    n_seeds_random : int
-        Si el método es 'random', número total de semillas a generar.
-    random_seed : int
-        Semilla del generador aleatorio para reproducibilidad.
+    
+        Parameters:
+        mask : np.ndarray
+            Máscara binaria del cerebro de forma (X, Y, Z).
+        fa_volume : np.ndarray
+            Mapa de Anisotropía Fraccional de forma (X, Y, Z).
+        fa_thresh : float
+            Umbral mínimo de FA para considerar materia blanca.
+        method : str
+            'grid' para sub-rejilla fija por vóxel o 'random' para muestreo
+            estocástico.
+        density : int
+            Si el método es 'grid', define el número de semillas por eje dentro del
+            vóxel (ej. 2 significa 2x2x2 = 8 semillas por vóxel).
+        n_seeds_random : int
+            Si el método es 'random', número total de semillas a generar.
+        random_seed : int
+            Semilla del generador aleatorio para reproducibilidad.
 
     Returns:
     np.ndarray

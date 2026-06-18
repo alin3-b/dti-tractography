@@ -5,7 +5,6 @@ import numpy as np
 import pytest
 from scripts.run_seeding import main
 
-
 @patch('scripts.run_seeding.Path.exists')
 @patch('nibabel.load')
 @patch('scripts.run_seeding.generate_seeds')

@@ -53,6 +53,5 @@ def main() -> None:
     print(f"   Método: {config['method']}")
     print(f'   Guardado en: {seeds_output_path}')
 
-
 if __name__ == '__main__':
     main()

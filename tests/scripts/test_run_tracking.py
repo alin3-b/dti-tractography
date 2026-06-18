@@ -24,10 +24,10 @@ def test_run_tracking_pipeline_flow(
     optimizada los tensores y mapas microestructurales, pase los parámetros del
     algoritmo mediante desempaquetado y exporte el archivo final .trk.
     """
-    # 1. Forzar a que la validación defensiva detecte todos los archivos obligatorios
+    # Forzar a que la validación defensiva detecte todos los archivos obligatorios
     mock_exists.return_value = True
 
-    # 2. Configurar arreglos simulados en memoria para los retornos de I/O
+    # Configurar arreglos simulados en memoria para los retornos de I/O
     fake_pdd = np.zeros((4, 4, 4, 3), dtype=np.float32)
     fake_fa = np.ones((4, 4, 4), dtype=np.float32) * 0.4
     fake_mask = np.ones((4, 4, 4), dtype=bool)
@@ -41,11 +41,11 @@ def test_run_tracking_pipeline_flow(
     ]
     mock_load_seeds.return_value = fake_seeds
 
-    # 3. Configurar el retorno del motor de propagación del tracking
+    # Configurar el retorno del motor de propagación del tracking
     fake_streamlines = [np.array([[1.5, 1.5, 1.5]], dtype=np.float32)]
     mock_track_seeds.return_value = fake_streamlines
 
-    # 4. Ejecutar la función principal del script ejecutable
+    # Ejecutar la función principal del script ejecutable
     main()
 
     # VERIFICACIONES DE INTEGRACIÓN (ASSERTS)

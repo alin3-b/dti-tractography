@@ -30,22 +30,22 @@ def test_build_design_matrix_analytical_values():
     
     A = build_design_matrix(bvecs)
     
-    # --- Fila 0: [1, 0, 0] -> gx^2=1, los demás componentes cruzados son 0
+    # Fila 0: [1, 0, 0] -> gx^2=1, los demás componentes cruzados son 0
     # Esperado: [1, 0, 0, 0, 0, 0]
     expected_row_0 = np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0])
     assert np.allclose(A[0], expected_row_0), f"Error en dirección X pura. Obtenido: {A[0]}"
     
-    # --- Fila 1: [0, 1, 0] -> gy^2=1, los demás componentes son 0
+    # Fila 1: [0, 1, 0] -> gy^2=1, los demás componentes son 0
     # Esperado: [0, 0, 0, 1, 0, 0]
     expected_row_1 = np.array([0.0, 0.0, 0.0, 1.0, 0.0, 0.0])
     assert np.allclose(A[1], expected_row_1), f"Error en dirección Y pura. Obtenido: {A[1]}"
     
-    # --- Fila 2: [0, 0, 1] -> gz^2=1, los demás componentes son 0
+    # Fila 2: [0, 0, 1] -> gz^2=1, los demás componentes son 0
     # Esperado: [0, 0, 0, 0, 0, 1]
     expected_row_2 = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
     assert np.allclose(A[2], expected_row_2), f"Error en dirección Z pura. Obtenido: {A[2]}"
     
-    # --- Fila 3: [1/sqrt(2), 1/sqrt(2), 0] 
+    # Fila 3: [1/sqrt(2), 1/sqrt(2), 0] 
     # gx^2 = 0.5
     # 2*gx*gy = 2 * (1/sqrt(2)) * (1/sqrt(2)) = 2 * 0.5 = 1.0
     # gy^2 = 0.5

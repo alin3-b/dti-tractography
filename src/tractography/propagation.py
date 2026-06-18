@@ -3,7 +3,6 @@ from typing import Optional, Tuple
 import numpy as np
 from src.tractography.interpolation import interpolate_pdd
 
-
 def propagate_streamline(
     seed: np.ndarray,
     pdd_volume: np.ndarray,

@@ -7,7 +7,6 @@ from tqdm import tqdm
 
 from src.tractography.propagation import track_full_streamline
 
-
 def track_multiple_seeds(
     seeds: np.ndarray,
     pdd_volume: np.ndarray,

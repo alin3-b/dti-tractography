@@ -2,7 +2,6 @@
 from typing import Optional
 import numpy as np
 
-
 def interpolate_pdd(
     pos: np.ndarray, pdd_volume: np.ndarray, mask: np.ndarray
 ) -> Optional[np.ndarray]:

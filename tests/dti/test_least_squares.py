@@ -17,7 +17,7 @@ def test_fit_ols_exact_recovery():
     Construye un sistema ideal B = A * d_true y verifica que fit_ols recupere
     exactamente el vector d_true original sin desviaciones.
     """
-    # 1. Definimos una matriz A artificial de rango completo (N=8, más de los 6 necesarios)
+    # Definimos una matriz A artificial de rango completo (N=8, más de los 6 necesarios)
     A = np.array([
         [1.0, 0.2, 0.1, 0.5, 0.0, 0.1],
         [0.1, 1.0, 0.3, 0.0, 0.4, 0.2],
@@ -29,18 +29,18 @@ def test_fit_ols_exact_recovery():
         [0.1, 0.5, 0.1, 0.6, 0.1, 0.2]
     ])
     
-    # 2. Definimos un vector de coeficientes del tensor real (d_true)
+    # Definimos un vector de coeficientes del tensor real (d_true)
     # Siguiendo el orden teórico: [D11, D12, D13, D22, D23, D33]
     d_true = np.array([1.5e-3, 0.2e-3, 0.1e-3, 1.2e-3, 0.0, 0.9e-3])
     
-    # 3. Generamos el vector B teórico limpio (B = A * d_true)
+    # Generamos el vector B teórico limpio (B = A * d_true)
     B = np.dot(A, d_true)
     
-    # 4. Calculamos pseudoinversa y ajustamos por OLS usando tus funciones
+    # Calculamos pseudoinversa y ajustamos por OLS usando tus funciones
     A_pinv = calculate_pseudoinverse(A)
     d_estimated = fit_ols(A_pinv, B)
     
-    # 5. El vector estimado debe ser idéntico al real en precisión de punto flotante
+    # El vector estimado debe ser idéntico al real en precisión de punto flotante
     assert d_estimated.shape == (6,), "El vector de parámetros estimado debe contener exactamente 6 elementos."
     assert np.allclose(d_estimated, d_true, atol=1e-12), (
         f"El estimador OLS no recuperó el tensor exacto.\n"

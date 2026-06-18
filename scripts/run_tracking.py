@@ -6,7 +6,6 @@ from src.io.load_data import load_nifti, load_seeds
 from src.io.save_data import save_tractogram
 from src.tractography.tracking import track_multiple_seeds
 
-
 def main() -> None:
     print("Tractografía Determinística desde Tensor de Difusión")
     

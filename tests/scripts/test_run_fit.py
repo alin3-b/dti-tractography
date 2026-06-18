@@ -6,7 +6,6 @@ from unittest.mock import MagicMock, patch
 # Importamos la función main del script ejecutable
 from scripts.run_fit import main
 
-
 @patch('scripts.run_fit.load_dwi_data')
 @patch('scripts.run_fit.fit_tensor_model')
 @patch('scripts.run_fit.calculate_dti_metrics')
